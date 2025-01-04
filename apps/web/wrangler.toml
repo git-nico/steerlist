@@ -16,8 +16,12 @@ compatibility_flags = [ "nodejs_compat" ]
 # - https://developers.cloudflare.com/pages/functions/bindings/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/pages/functions/bindings/#secrets
-# [vars]
+[vars]
 # MY_VARIABLE = "production_value"
+MSW_ENABLED = "false"
+PUBLIC_SANITY_DATASET = "production"
+PUBLIC_SANITY_PROJECT_ID = "s65a2pxc"
+RESEND_AUDIENCE_ID = "4550ed5c-9a01-48a4-8d9a-3694c710f23f"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/pages/functions/bindings/#workers-ai
