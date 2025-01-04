@@ -1,10 +1,8 @@
-import { dev } from '$app/environment';
-import { fail } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms';
+import { randomUUID } from 'node:crypto';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { newsletterSchema } from './schema';
-
 export const load: PageServerLoad = async () => ({
 	feedbackForm: await superValidate(zod(newsletterSchema)),
 });
@@ -60,33 +58,31 @@ export const actions: Actions = {
 
 export const actions: Actions = {
 	default: async ({ request, locals: { newsletterRepo } }) => {
-		const form = await superValidate(request, zod(newsletterSchema));
-
-		if (!form.valid) {
-			return fail(400, { form });
-		}
-
-		// timeout to see the Spinner in development
-		dev && (await new Promise(resolve => setTimeout(resolve, 3000)));
-
-		const { email } = form.data;
-
-		if (dev) {
-			if (email === 'nico@gmail.com') {
-				return message(form, { type: 'error', text: 'Invalid email, please try again.' });
-			}
-		}
-
-		try {
-			newsletterRepo.subscribe(email);
-		} catch (error) {
-			if (error instanceof Error) {
-				return message(form, { type: 'error', text: error.message });
-			} else {
-				return message(form, { type: 'error', text: 'We had a problem signing you up, please try again.' });
-			}
-		}
-
-		return message(form, { type: 'success', text: "Super! You're signed up, thank you!" });
+		// const { randomUUID } = await import('node:crypto');
+		const uuid = randomUUID();
+		console.log('uuid', uuid);
+		return { uuid };
+		// const form = await superValidate(request, zod(newsletterSchema));
+		// if (!form.valid) {
+		// 	return fail(400, { form });
+		// }
+		// // timeout to see the Spinner in development
+		// dev && (await new Promise(resolve => setTimeout(resolve, 3000)));
+		// const { email } = form.data;
+		// if (dev) {
+		// 	if (email === 'nico@gmail.com') {
+		// 		return message(form, { type: 'error', text: 'Invalid email, please try again.' });
+		// 	}
+		// }
+		// try {
+		// 	newsletterRepo.subscribe(email);
+		// } catch (error) {
+		// 	if (error instanceof Error) {
+		// 		return message(form, { type: 'error', text: error.message });
+		// 	} else {
+		// 		return message(form, { type: 'error', text: 'We had a problem signing you up, please try again.' });
+		// 	}
+		// }
+		// return message(form, { type: 'success', text: "Super! You're signed up, thank you!" });
 	},
 };

@@ -1,16 +1,12 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Contact from '$lib/components/icons/Contact.svelte';
 	import Discord from '$lib/components/icons/Discord.svelte';
-	import Sparkles from '$lib/components/icons/Sparkles.svelte';
-	import Spinner from '$lib/components/icons/Spinner.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
 	import type { PageServerData } from './$types';
 	import Hero from './Hero.svelte';
-	import NewsleterForm from './NewsleterForm.svelte';
-	import bgImage from './newsletter-bg.jpg?enhanced';
 
-	let { data }: { data: PageServerData } = $props();
+	let { data, form }: { data: PageServerData; form: any } = $props();
 
 	// const isDelayedCallback = (isDelayed: boolean) => {
 	// 	return isDelayed;
@@ -45,6 +41,16 @@
 		<Button variant="outline" href="/discord" rel="noopener noreferrer" target="_blank"><Discord />Join the community</Button>
 		<Button variant="outline" href="/contact"><Contact />Contact</Button>
 	</div>
+</section>
+
+<section>
+	<form method="post" use:enhance>
+		<button>submit</button>
+	</form>
+
+	{#if form?.uuid}
+		<p>UUID: <span>{form.uuid}</span></p>
+	{/if}
 </section>
 
 <!-- <section class="brand-gradient px-inline py-8 lg:py-8">
