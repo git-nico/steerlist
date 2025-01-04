@@ -10,10 +10,10 @@ test('navigation smoke test', async ({ page }) => {
 		timeout: 20_000,
 	});
 
-	await expect(page.getByRole('heading', { level: 1, name: 'Gainzatron' })).toBeVisible();
+	await expect(page.getByRole('heading', { level: 1, name: 'Steerlist' })).toBeVisible();
 
 	// Expect a title "to contain" a substring.
-	await expect(page).toHaveTitle(/Gainzatron/);
+	await expect(page).toHaveTitle(/Steerlist/);
 
 	// use the header for navigation
 	const headerElement = page.getByRole('banner');
