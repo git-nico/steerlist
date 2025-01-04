@@ -1,0 +1,152 @@
+:root {
+	--font-family-base: system-ui;
+	--font-family-base-line-height: 1.6;
+	--font-family-heading: system-ui;
+	--font-family-heading-line-height: 1.1;
+	--font-family-code: monospace;
+	--body-max-width: 75ch;
+	--padding-inline: clamp(1rem, 5vw, 2rem);
+}
+
+/* *,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	} */
+
+html {
+	/* Mobile Safari increases the default font-size when you switch a website from portrait to landscape. On phones that is, it doesn’t do it on iPad. */
+	-moz-text-size-adjust: none;
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none;
+
+	font-family: var(--font-family-base);
+	/* allows to animate height, width etc. */
+	interpolate-size: allow-keywords;
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	min-height: 100svh;
+	/* min-height: 100dvh; */
+	line-height: var(--font-family-base-line-height);
+}
+
+body > :is(header, footer),
+main,
+section,
+article {
+	container-type: inline-size;
+}
+
+/* Set shorter line heights on headings and interactive elements */
+:is(h1, h2, h3, h4, button, input, label) {
+	line-height: var(--font-family-heading-line-height);
+}
+
+/* Inherit fonts for inputs and buttons */
+:is(input, button, textarea, select) {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+/* Make sure text areas without a rows attribute are not tiny */
+textarea:not([rows]) {
+	min-height: 10em;
+}
+
+:where(ul, ol, dl) {
+	margin: 0;
+}
+
+nav :where(ul, ol) {
+	list-style: '';
+	padding: 0;
+}
+
+:is(h1, h2, h3, h4) {
+	text-wrap: balance;
+	font-family: var(--font-family-heading);
+	font-weight: 700;
+}
+
+:is(p, li, figcaption) {
+	max-width: var(--body-max-width);
+	text-wrap: pretty;
+}
+
+/* Set font style to italic for alt text and captions */
+:is(figcaption, img) {
+	font-style: italic;
+}
+
+code {
+	font-family: var(--font-family-code);
+}
+
+/* Remove default (start) margin in favour of better control in authored CSS */
+:first-child {
+	margin-block-start: 0;
+}
+
+/* Remove default (end) margin in favour of better control in authored CSS */
+:is(h1, h2, h3, h4, p, figure, blockquote, dl, dd) {
+	margin-block-end: 0;
+}
+
+/* Improve media defaults */
+:where(img, picture, video, canvas, svg) {
+	max-width: 100%;
+	display: block;
+}
+
+td,
+math,
+time[datetime*=':'] {
+	font-variant-numeric: tabular-nums lining-nums slashed-zero;
+}
+
+iframe {
+	border-style: none;
+}
+
+svg:not([fill]) {
+	fill: currentColor;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+/* You might want to adjust this if you have a fixed header though. */
+:target {
+	scroll-margin-block: 32px;
+	scroll-margin-block: 5rlh;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+	text-decoration-skip-ink: auto;
+	color: currentColor;
+}
+
+/* No scroll chaining occurs to neighboring scrolling areas, and default scroll overflow behavior is prevented. */
+/* The contain value disables native browser navigation, including the vertical pull-to-refresh gesture and horizontal swipe navigation. */
+* {
+	overscroll-behavior: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}

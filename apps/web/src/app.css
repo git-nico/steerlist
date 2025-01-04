@@ -1,0 +1,145 @@
+@import 'open-props/easings';
+@import './reset.css' layer(base);
+@import './view-transitions.css' layer(base);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color-scheme: light;
+}
+
+[data-theme='dark'] {
+	color-scheme: dark;
+}
+
+/* SmolCSS */
+
+.stack {
+	display: grid;
+	grid-template-areas: 'stack';
+}
+
+.stack > * {
+	grid-area: stack;
+}
+
+@layer base {
+	@font-face {
+		font-family: 'Doto Variable';
+		src: url('$lib/fonts/Doto-VariableFont_ROND,wght.ttf');
+	}
+
+	:root {
+		--font-serif: 'Doto Variable';
+		--font-family-heading: 'Doto Variable', system-ui;
+		font-variation-settings: 'ROND' 80;
+	}
+
+	:root,
+	[data-theme='light'] {
+		--background: 0 0% 100%;
+		--foreground: 224 71.4% 4.1%;
+		--card: 0 0% 100%;
+		--card-foreground: 224 71.4% 4.1%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 224 71.4% 4.1%;
+		--primary: 262.1 83.3% 57.8%;
+		--primary-foreground: 210 20% 98%;
+		--secondary: 220 14.3% 95.9%;
+		--secondary-foreground: 220.9 39.3% 11%;
+		--muted: 220 14.3% 95.9%;
+		--muted-foreground: 220 8.9% 46.1%;
+		--accent: 220 14.3% 95.9%;
+		--accent-foreground: 220.9 39.3% 11%;
+		--destructive: 0 72.22% 50.59%;
+		--destructive-foreground: 210 20% 98%;
+		--border: 220 13% 91%;
+		--input: 220 13% 91%;
+		--ring: 262.1 83.3% 57.8%;
+		--radius: 0.5rem;
+	}
+
+	.dark,
+	[data-theme='dark'] {
+		--background: 224 71.4% 4.1%;
+		--foreground: 210 20% 98%;
+		--card: 224 71.4% 4.1%;
+		--card-foreground: 210 20% 98%;
+		--popover: 224 71.4% 4.1%;
+		--popover-foreground: 210 20% 98%;
+		--primary: 263.4 70% 50.4%;
+		--primary-foreground: 210 20% 98%;
+		--secondary: 215 27.9% 16.9%;
+		--secondary-foreground: 210 20% 98%;
+		--muted: 215 27.9% 16.9%;
+		--muted-foreground: 217.9 10.6% 64.9%;
+		--accent: 215 27.9% 16.9%;
+		--accent-foreground: 210 20% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 210 20% 98%;
+		--border: 215 27.9% 16.9%;
+		--input: 215 27.9% 16.9%;
+		--ring: 263.4 70% 50.4%;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		html:not([data-theme]):not(.dark) {
+			--background: 224 71.4% 4.1%;
+			--foreground: 210 20% 98%;
+			--card: 224 71.4% 4.1%;
+			--card-foreground: 210 20% 98%;
+			--popover: 224 71.4% 4.1%;
+			--popover-foreground: 210 20% 98%;
+			--primary: 263.4 70% 50.4%;
+			--primary-foreground: 210 20% 98%;
+			--secondary: 215 27.9% 16.9%;
+			--secondary-foreground: 210 20% 98%;
+			--muted: 215 27.9% 16.9%;
+			--muted-foreground: 217.9 10.6% 64.9%;
+			--accent: 215 27.9% 16.9%;
+			--accent-foreground: 210 20% 98%;
+			--destructive: 0 62.8% 30.6%;
+			--destructive-foreground: 210 20% 98%;
+			--border: 215 27.9% 16.9%;
+			--input: 215 27.9% 16.9%;
+			--ring: 263.4 70% 50.4%;
+		}
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+		-webkit-font-smoothing: antialiased;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	.bg-brand {
+		/* background-image: linear-gradient(to bottom right in oklab, #8b5cf6, #c4b5fd 60%, #2dd4bf 90%); */
+		background-image: linear-gradient(to bottom right in oklab, #8b5cf6, #c4b5fd, #2dd4bf);
+	}
+
+	.bg-brand-reverse {
+		/* background-image: linear-gradient(to bottom right in oklab, #2dd4bf, #c4b5fd 60%, #8b5cf6 90%); */
+		background-image: linear-gradient(to bottom right in oklab, #2dd4bf, #c4b5fd, #8b5cf6);
+	}
+}

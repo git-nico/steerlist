@@ -1,0 +1,40 @@
+{
+	"name": "@repo/steerlist",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm -r --parallel dev",
+		"dev:web": "pnpm -F web dev",
+		"dev:cms": "pnpm -F cms dev",
+		"build": "pnpm -r --parallel build",
+		"preview": "pnpm -r --parallel preview",
+		"check": "pnpm -F web check",
+		"check:watch": "pnpm -F web check:watch",
+		"format": "prettier --write .",
+		"format:check": "prettier -c .",
+		"lint": "prettier --check . && eslint .",
+		"test:unit": "pnpm -F web test:unit",
+		"test:e2e": "pnpm -F web test:e2e",
+		"test2:ui": "pnpm -F web test2:ui",
+		"test": "pnpm -F web test"
+	},
+	"devDependencies": {
+		"eslint": "^9.17.0",
+		"eslint-config-prettier": "^9.1.0",
+		"globals": "^15.14.0",
+		"eslint-plugin-svelte": "^2.46.1",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.2",
+		"prettier-plugin-tailwindcss": "^0.6.9"
+	},
+	"engines": {
+		"node": ">=22",
+		"pnpm": ">=8"
+	},
+	"pnpm": {
+		"overrides": {
+			"vite": "^6.0.6"
+		}
+	},
+	"packageManager": "pnpm@9.15.2"
+}

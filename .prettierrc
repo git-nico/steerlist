@@ -1,0 +1,46 @@
+{
+	"arrowParens": "avoid",
+	"bracketSameLine": true,
+	"bracketSpacing": true,
+	"embeddedLanguageFormatting": "auto",
+	"endOfLine": "lf",
+	"experimentalTernaries": false,
+	"htmlWhitespaceSensitivity": "css",
+	"insertPragma": false,
+	"printWidth": 99999,
+	"proseWrap": "never",
+	"quoteProps": "as-needed",
+	"requirePragma": false,
+	"semi": true,
+	"singleAttributePerLine": false,
+	"singleQuote": true,
+	"tabWidth": 4,
+	"trailingComma": "es5",
+	"useTabs": true,
+	"svelteAllowShorthand": true,
+	"svelteIndentScriptAndStyle": true,
+	"svelteSortOrder": "options-scripts-markup-styles",
+	"vueIndentScriptAndStyle": true,
+	"plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "svelte"
+			}
+		},
+		{
+			"files": "*.md",
+			"options": {
+				"embeddedLanguageFormatting": "off"
+			}
+		},
+		{
+			"files": ["*.yaml", "*.yml"],
+			"options": {
+				"tabWidth": 2,
+				"useTabs": false
+			}
+		}
+	]
+}

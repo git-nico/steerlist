@@ -1,0 +1,83 @@
+body {
+	view-transition-name: body;
+}
+
+@keyframes fade-out {
+	to {
+		opacity: 0%;
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0%;
+	}
+	to {
+		opacity: 100%;
+	}
+}
+
+/* "normal" navigation */
+@keyframes fade-out-to-left {
+	to {
+		opacity: 0%;
+		transform: translateX(-50%);
+	}
+}
+
+@keyframes slide-from-right {
+	from {
+		transform: translateX(100%);
+	}
+}
+
+/* "back" navigation */
+@keyframes fade-out-to-right {
+	to {
+		opacity: 0%;
+		transform: translateX(50%);
+	}
+}
+
+@keyframes slide-from-left {
+	from {
+		transform: translateX(-100%);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:root::view-transition-old(body) {
+		pointer-events: none;
+		animation: 300ms ease-out both fade-out-to-left;
+	}
+
+	:root::view-transition-new(body) {
+		pointer-events: none;
+		animation: 300ms ease-out both slide-from-right;
+	}
+
+	/* "back" navigation */
+	:root[data-back]::view-transition-old(body) {
+		pointer-events: none;
+		animation: 300ms ease-out both fade-out-to-right;
+	}
+
+	:root[data-back]::view-transition-new(body) {
+		pointer-events: none;
+		animation: 300ms ease-out both slide-from-left;
+	}
+
+	/* smooth scrolling */
+	:has(:target) {
+		scroll-behavior: smooth;
+		scroll-padding-top: 4rem;
+	}
+
+	:root::view-transition-old(favorite-activity) {
+		animation: 300ms ease-out both fade-out;
+	}
+
+	:root::view-transition-new(favorite-activity) {
+		animation: 300ms ease-out both fade-in;
+	}
+}
