@@ -409,6 +409,8 @@ The content should be just the version number
 
 https://steerlist-live.pages.dev/
 
+[See Paert 2](#cloudflare-2)
+
 ## The Essential Meta Tags for Social Media
 
 [CSS Tricks](https://css-tricks.com/essential-meta-tags-social-media/)
@@ -1169,3 +1171,224 @@ pnpm add -D @sveltejs/enhanced-img
 > 	]
 > });
 > ```
+
+## Cloudflare 2
+
+### Install wrangler
+
+[docs](https://developers.cloudflare.com/workers/wrangler/)
+
+Wrangler, the Cloudflare Developer Platform command-line interface (CLI), allows you to manage Worker projects.
+
+```sh
+pnpm add -D wrangler
+```
+
+### Typescript
+
+Pages Functions supports TypeScript. Author any files in your /functions directory with a .ts extension instead of a .js extension to start using TypeScript.
+
+To add the runtime types to your project, run:
+
+```sh
+pnpm add -D @cloudflare/workers-types
+```
+
+To use one of these entrypoints, you need to specify them in your tsconfig.json.
+
+```json
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler",
+		"types": [
+			"@cloudflare/workers-types/2023-07-01"
+		]
+	}
+}
+```
+
+or add a refference in **_/src/app.d.ts_**
+
+> **_app.d.ts_**
+>
+> ```typescript
+> // See https://svelte.dev/docs/kit/types#app.d.ts
+>
+> /// <reference types="@cloudflare/workers-types" />
+>
+> import type { ResendNewsletterRepo } from '$lib/repos/newsletter/ResendNewsletterRepo';
+> import type { SanityProgramRepo } from '$lib/repos/programme/SanityProgramRepo';
+>
+> // for information about these interfaces
+> declare global {
+> 	interface Window {
+> 		toggleTheme?: () => 'dark' | 'light';
+> 		getTheme?: () => 'dark' | 'light';
+> 	}
+> 	namespace App {
+> 		interface Env {
+> 			DEV_DB: D1Database;
+> 		}
+>
+> 		interface Platform {
+> 			env: Env;
+> 			cf: CfProperties;
+> 			ctx: ExecutionContext;
+> 		}
+> 		// interface Error {}
+> 		interface Locals {
+> 			newsletterRepo: ResendNewsletterRepo;
+> 			hardcodedProgrammeRepo: HardcodedProgramRepo;
+> 			programmeRepo: SanityProgramRepo;
+> 		}
+> 		// interface PageData {}
+> 		// interface PageState {}
+> 		// interface Platform {}
+> 		namespace Superforms {
+> 			type Message = {
+> 				type: 'error' | 'success';
+> 				text: string;
+> 			};
+> 		}
+> 	}
+> }
+>
+> export {};
+> ```
+
+In the project root create the folowing file
+
+> **_wrangler.toml_**
+>
+> ```toml
+> #:schema node_modules/wrangler/config-schema.json
+> name = "steerlist"
+> compatibility_date = "2024-12-30"
+> pages_build_output_dir = ".svelte-kit/cloudflare"
+> compatibility_flags = [ "nodejs_compat" ]
+>
+> # Automatically place your workloads in an optimal location to minimize latency.
+> # If you are running back-end logic in a Pages Function, running it closer to your back-end infrastructure
+> # rather than the end user may result in better performance.
+> # Docs: https://developers.cloudflare.com/pages/functions/smart-placement/#smart-placement
+> # [placement]
+> # mode = "smart"
+>
+> # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
+> # Docs:
+> # - https://developers.cloudflare.com/pages/functions/bindings/#environment-variables
+> # Note: Use secrets to store sensitive data.
+> # - https://developers.cloudflare.com/pages/functions/bindings/#secrets
+> [vars]
+> # MY_VARIABLE = "production_value"
+> MSW_ENABLED = "false"
+> PUBLIC_SANITY_DATASET = "production"
+> PUBLIC_SANITY_PROJECT_ID = "s65a2pxc"
+> RESEND_AUDIENCE_ID = "4550ed5c-9a01-48a4-8d9a-3694c710f23f"
+>
+> # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#workers-ai
+> # [ai]
+> # binding = "AI"
+>
+> # Bind a D1 database. D1 is Cloudflare’s native serverless SQL database.
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#d1-databases
+> # [[d1_databases]]
+> # binding = "MY_DB"
+> # database_name = "my-database"
+> # database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+>
+> # Bind a Durable Object. Durable objects are a scale-to-zero compute primitive based on the actor model.
+> # Durable Objects can live for as long as needed. Use these when you need a long-running "server", such as in realtime apps.
+> # Docs: https://developers.cloudflare.com/workers/runtime-apis/durable-objects
+> # [[durable_objects.bindings]]
+> # name = "MY_DURABLE_OBJECT"
+> # class_name = "MyDurableObject"
+> # script_name = 'my-durable-object'
+>
+> # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#kv-namespaces
+> # [[kv_namespaces]]
+> # binding = "MY_KV_NAMESPACE"
+> # id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+>
+> # Bind a Queue producer. Use this binding to schedule an arbitrary task that may be processed later by a Queue consumer.
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#queue-producers
+> # [[queues.producers]]
+> # binding = "MY_QUEUE"
+> # queue = "my-queue"
+>
+> # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#r2-buckets
+> # [[r2_buckets]]
+> # binding = "MY_BUCKET"
+> # bucket_name = "my-bucket"
+>
+> # Bind another Worker service. Use this binding to call another Worker without network overhead.
+> # Docs: https://developers.cloudflare.com/pages/functions/bindings/#service-bindings
+> # [[services]]
+> # binding = "MY_SERVICE"
+> # service = "my-service"
+>
+> # To use different bindings for preview and production environments, follow the examples below.
+> # When using environment-specific overrides for bindings, ALL bindings must be specified on a per-environment basis.
+> # Docs: https://developers.cloudflare.com/pages/functions/wrangler-configuration#environment-specific-overrides
+>
+> ######## PREVIEW environment config ########
+>
+> # [env.preview.vars]
+> # API_KEY = "xyz789"
+>
+> # [[env.preview.kv_namespaces]]
+> # binding = "MY_KV_NAMESPACE"
+> # id = "<PREVIEW_NAMESPACE_ID>"
+>
+> ######## PRODUCTION environment config ########
+>
+> # [env.production.vars]
+> # API_KEY = "abc123"
+>
+> # [[env.production.kv_namespaces]]
+> # binding = "MY_KV_NAMESPACE"
+> # id = "<PRODUCTION_NAMESPACE_ID>"
+> ```
+
+When you start using a wrangler.toml in your project, the **public variables** that were previously defined via the Cloudflare Dashboard, now will have to be declared in the **`wrangler.toml`** file.  
+**Secrets** will still have to be declared via the Cloudflare Dashboard. ([docs](https://developers.cloudflare.com/workers/configuration/secrets/))
+
+### Node.js compatibility flag
+
+Node.js APIs are available directly as Runtime APIs, with no need to add polyfills to your own code. To enable these APIs in your Worker, add the nodejs_compat compatibility flag to your wrangler.toml:
+
+```toml
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2024-12-30"
+```
+
+This will allow you to use, for example, **node:crypto**
+
+## D1 database
+
+Create a D1 database:
+
+- goto **Storage & Databases**
+- choose **D1 SQL Database**
+- click **create**
+- enter **name** (i.e. _`steerlist-dev`_)
+
+Bind the database to your Cloadflare Page
+
+- goto **Workers & Pages**
+- select the application
+- select the **settings** tab
+- choose **bindings**
+- 

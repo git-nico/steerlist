@@ -1,5 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 
+/// <reference types="@cloudflare/workers-types" />
+
 import type { ResendNewsletterRepo } from '$lib/repos/newsletter/ResendNewsletterRepo';
 import type { SanityProgramRepo } from '$lib/repos/programme/SanityProgramRepo';
 
@@ -10,6 +12,15 @@ declare global {
 		getTheme?: () => 'dark' | 'light';
 	}
 	namespace App {
+		interface Env {
+			DEV_DB: D1Database;
+		}
+
+		interface Platform {
+			env: Env;
+			cf: CfProperties;
+			ctx: ExecutionContext;
+		}
 		// interface Error {}
 		interface Locals {
 			newsletterRepo: ResendNewsletterRepo;

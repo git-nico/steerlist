@@ -13,9 +13,12 @@
 		"test:unit": "vitest run",
 		"test:e2e": "playwright test",
 		"test2:ui": "playwright test --ui",
-		"test": "pnpm run --parallel \"/^test:(?!ui).*$/\""
+		"test": "pnpm run --parallel \"/^test:(?!ui).*$/\"",
+		"cf-deploy": "pnpm run build && wrangler pages deploy",
+		"cf-typegen": "wrangler types && move worker-configuration.d.ts src/"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20241230.0",
 		"@fontsource/cherry-swash": "^5.1.1",
 		"@playwright/test": "^1.49.1",
 		"@sanity/client": "^6.24.1",
