@@ -1265,6 +1265,18 @@ or add a refference in **_/src/app.d.ts_**
 > export {};
 > ```
 
+### Enable Wrangler OAuth
+
+```sh
+pnpm dlx wrangler login
+```
+
+If you have an existing Pages project with configuration set up via the Cloudflare dashboard and do not have an existing wrangler.toml file in your Project, run the wrangler pages download config command in your Pages project directory.
+
+```sh
+pnpx wrangler pages download config steerlist-live
+```
+
 In the project root create the folowing file
 
 > **_wrangler.toml_**
@@ -1378,17 +1390,83 @@ This will allow you to use, for example, **node:crypto**
 
 ## D1 database
 
-Create a D1 database:
+#### Create a D1 database:
 
 - goto **Storage & Databases**
 - choose **D1 SQL Database**
 - click **create**
 - enter **name** (i.e. _`steerlist-dev`_)
 
-Bind the database to your Cloadflare Page
+#### Bind the database to your Cloadflare Page
+
+If you are using wrangler bind using **`wrangler.toml`** otherwise
 
 - goto **Workers & Pages**
 - select the application
 - select the **settings** tab
 - choose **bindings**
-- 
+- enter details
+
+When you use wrangler, the dev server will automatically use the remote database.
+
+> You can setup multiple databases for different environments
+
+## Drizzle
+
+[Get Started with Drizzle and D1](https://orm.drizzle.team/docs/get-started/d1-new)  
+[Drizzle <> Cloudflare D1](https://orm.drizzle.team/docs/connect-cloudflare-d1)  
+[Drizzle | Cloudflare D1 HTTP API with Drizzle Kit](https://orm.drizzle.team/docs/guides/d1-http-with-drizzle-kit)
+
+### Step 1: Install Packages
+
+```sh
+pnpm add drizzle-orm
+pnpm add -D drizzle-kit
+```
+
+### Step 2: Initialize the driver
+
+You would need to have a wrangler.toml file for D1 database and will look something like this:
+
+```toml
+name = "steerlist"
+compatibility_date = "2024-12-30"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+compatibility_flags = [ "nodejs_compat" ]
+
+[[ d1_databases ]]
+binding = "DB"
+database_name = "YOUR DB NAME"
+database_id = "YOUR DB ID"
+migrations_dir = "drizzle/migrations"
+```
+
+### Step 3: Setup Drizzle config file
+
+**Drizzle config** - a configuration file that is used by Drizzle Kit and contains all the information about your database connection, migration folder and schema files.
+
+Create a **`drizzle.config.ts`** file in the root of your project and add the following content:
+
+> **_`drizzle.config.ts`_**
+>
+> ```typescript
+> import 'dotenv/config';
+> import { defineConfig } from 'drizzle-kit';
+>
+> export default defineConfig({
+>  // Stores migration files, meta, and journal
+>  out: './drizzle',
+>  schema: './src/lib/server/db/*.ts',
+>  dialect: 'sqlite',
+>  driver: '',
+>  dbCredentials: {
+>    accountId: process.env.CLOUDFLARE_ACCOUNT_ID!,
+>    databaseId: process.env.CLOUDFLARE_DATABASE_ID!,
+>    token: process.env.CLOUDFLARE_D1_TOKEN!,
+>  },
+>  // Print all statements
+>  verbose: true,
+>  // Always ask for confirmation
+>  strict: true
+> });
+> ```

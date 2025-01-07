@@ -16,7 +16,8 @@
 		"test:unit": "pnpm -F web test:unit",
 		"test:e2e": "pnpm -F web test:e2e",
 		"test2:ui": "pnpm -F web test2:ui",
-		"test": "pnpm -F web test"
+		"test": "pnpm -F web test",
+		"update": "pnpm -r --latest update"
 	},
 	"devDependencies": {
 		"eslint": "^9.17.0",

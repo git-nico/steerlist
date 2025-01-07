@@ -32,4 +32,20 @@ const dependencyInjectionHandle: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
-export const handle = sequence(dependencyInjectionHandle);
+const demoHandle: Handle = async ({ event, resolve }) => {
+	if (!event.platform) throw new Error('DEV_DB not found');
+
+	const sql = `SELECT 'Hello Database!' AS greeting, CURRENT_TIMESTAMP AS now;`
+	const ps = event.platform.env.DEV_DB.prepare(sql);
+	const data = await ps?.first();
+	console.log('data', data);
+	if (data && data.now) {
+		const d = new Date(data.now + ' UTC');
+		console.log('local timestamp:', d.toLocaleString());
+	}
+
+	const response = await resolve(event);
+	return response;
+};
+
+export const handle = sequence(dependencyInjectionHandle, demoHandle);
