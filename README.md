@@ -1456,9 +1456,9 @@ Create a **`drizzle.config.ts`** file in the root of your project and add the fo
 > export default defineConfig({
 >  // Stores migration files, meta, and journal
 >  out: './drizzle',
->  schema: './src/lib/server/db/*.ts',
+>  schema: './src/lib/server/db/schema/*.ts',
 >  dialect: 'sqlite',
->  driver: '',
+>  driver: undefined,
 >  dbCredentials: {
 >    accountId: process.env.CLOUDFLARE_ACCOUNT_ID!,
 >    databaseId: process.env.CLOUDFLARE_DATABASE_ID!,
@@ -1470,3 +1470,60 @@ Create a **`drizzle.config.ts`** file in the root of your project and add the fo
 >  strict: true
 > });
 > ```
+
+> Soution to Typescript Error <span style="color:tomato">Cannot find name 'process'</span>:  
+> Goto the project root
+>
+> ```sh
+> pnpm add -D -w @types/node
+> ```
+
+### Step 4: Connect Drizzle ORM to the database
+
+> create an **`index.ts`** file in src/lib/server/db
+>
+> **_`src/lib/server/db/index.ts`_**
+>
+> ```typescript
+> import { drizzle } from 'drizzle-orm/d1';
+>
+> export interface Env {
+>  <BINDING_NAME>: D1Database;
+> }
+>
+> export default {
+>  async fetch(request: Request, env: Env) {
+>    const db = drizzle(env.<BINDING_NAME>);
+>  },
+> };
+> ```
+
+### Step 5: Add scripts to package.json
+
+add the following scripts to **`package.json`**
+
+> **_`package.json`_**
+>
+> ```json
+> {
+> 	"scripts": {
+> 		"db:push": "drizzle-kit push",
+> 		"db:migrate": "drizzle-kit migrate",
+> 		"db:studio": "drizzle-kit studio"
+> 	}
+> }
+> ```
+
+### Step 6: Create Schema
+
+If you are planning to use **`Lucia Auth`**, it is recommended to install Lucia first, so you can reuse the schema's that come with that installation.
+
+## Lucia Auth
+
+use the Svelte CLI to add Lucia to the project
+
+goto apps/web
+
+```sh
+pnpm dlx sv add lucia
+```
