@@ -8,4 +8,7 @@ export default defineConfig({
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},
+	ssr: {
+		external: ['node:dns/promises'],
+	},
 });
