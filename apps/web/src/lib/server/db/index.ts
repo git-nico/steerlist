@@ -1,5 +1,11 @@
 import { drizzle } from 'drizzle-orm/d1';
 
-export const createClient = async (platformDb: D1Database) => drizzle(platformDb);
+/**
+ * @throws {Error} When Cloudflare Platform is not available
+ */
+export const createClient = (platformDb: D1Database | undefined) => {
+	if (!platformDb) throw new Error('Cloudflare Platform not available!');
+	return drizzle(platformDb, { logger: true });
+};
 
-export type DBClient = ReturnType<typeof createClient>;
+export type db = ReturnType<typeof createClient>;

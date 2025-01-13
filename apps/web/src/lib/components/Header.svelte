@@ -26,6 +26,7 @@
 	<div class="flex items-center gap-2">
 		<nav>
 			<Button variant="ghost" href="/contact">Contact</Button>
+			<Button variant="ghost" href="/sign-up">Login</Button>
 		</nav>
 
 		<Button id="theme-toggle" variant="ghost" size="icon" class="p-1 text-amber-700 hover:bg-transparent hover:text-amber-500 dark:text-blue-200 dark:hover:text-blue-400 [&_svg]:!size-full" onclick={() => toggle()} title="Toggles Light & Dark"><ThemeToggleIcon /></Button>

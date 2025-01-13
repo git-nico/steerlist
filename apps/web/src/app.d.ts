@@ -4,6 +4,7 @@
 
 import type { ResendNewsletterRepo } from '$lib/repos/newsletter/ResendNewsletterRepo';
 import type { SanityProgramRepo } from '$lib/repos/programme/SanityProgramRepo';
+import type { db } from '$lib/server/db';
 
 // for information about these interfaces
 declare global {
@@ -26,6 +27,10 @@ declare global {
 			newsletterRepo: ResendNewsletterRepo;
 			hardcodedProgrammeRepo: HardcodedProgramRepo;
 			programmeRepo: SanityProgramRepo;
+			usersRepo: DbUsersRepo;
+			user: import('$lib/server/auth').SessionValidationResult['user'];
+			session: import('$lib/server/auth').SessionValidationResult['session'];
+			db: db;
 		}
 		// interface PageData {}
 		// interface PageState {}

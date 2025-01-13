@@ -1522,8 +1522,17 @@ If you are planning to use **`Lucia Auth`**, it is recommended to install Lucia 
 
 use the Svelte CLI to add Lucia to the project
 
+> the installation of Lucia through the Svelte CLI, expects the **`drizzle.config.ts`** **_schema_** property to pont to a single schema file.
+>
+> **schema: './src/lib/server/db/schema.ts'**
+
 goto apps/web
 
 ```sh
 pnpm dlx sv add lucia
 ```
+
+After the installation, you can change the **_schema_** property of **`drizzle.config.ts`** (back) to a folder  
+**schema: './src/lib/server/db/schema'**
+
+- copy the by **`Lucia`** generated schema.ts to the the schema folder and rename it to **auth.ts**
