@@ -1,5 +1,7 @@
 import { TEN_MINUTES_IN_SECONDS } from '$lib/constants';
+import * as auth from '$lib/server/auth';
 import { hash } from '$lib/server/crypto';
+import { createClient } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -23,7 +25,12 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals: { usersRepo } }) => {
+	default: async event => {
+		const {
+			request,
+			locals: { usersRepo },
+		} = event;
+
 		const form = await superValidate(request, zod(signUpSchema));
 		if (!form.valid) {
 			console.log('Form not valid!');
@@ -41,8 +48,12 @@ export const actions: Actions = {
 		}
 
 		try {
-			const result = await usersRepo.createUser({ email, passwordHash: await hash(password) });
-			console.log('result', result);
+			const newUserId = await usersRepo.createUser({ email, passwordHash: await hash(password) });
+
+			const db = createClient(event.platform?.env.DEV_DB);
+			const sessionToken = auth.generateSessionToken();
+			const session = await auth.createSession(db, sessionToken, newUserId);
+			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
 			if (e instanceof Error) {
 				console.log('error', e.message);
@@ -50,7 +61,7 @@ export const actions: Actions = {
 			}
 		}
 
-		redirect(307, '/');
+		redirect(302, '/');
 
 		// return {
 		// 	form,

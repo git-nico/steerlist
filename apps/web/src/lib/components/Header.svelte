@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { page } from '$app/state';
 	import ThemeToggleIcon from '$lib/components/ThemeToggleIcon.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import ShipWheel from './icons/ShipWheel.svelte';
@@ -24,9 +26,15 @@
 <header class="px-inline flex items-center justify-between py-2">
 	<Button variant="ghost" href="/" class="text-md font-serif font-black [&_svg]:size-6"><ShipWheel /> Steerlist</Button>
 	<div class="flex items-center gap-2">
-		<nav>
+		<nav class="flex items-center gap-2">
 			<Button variant="ghost" href="/contact">Contact</Button>
-			<Button variant="ghost" href="/sign-up">Login</Button>
+			{#if page.data.user}
+				<form method="post" action="/?/logout" use:enhance>
+					<Button type="submit" variant="ghost">Logout</Button>
+				</form>
+			{:else}
+				<Button variant="ghost" href="/login">Login</Button>
+			{/if}
 		</nav>
 
 		<Button id="theme-toggle" variant="ghost" size="icon" class="p-1 text-amber-700 hover:bg-transparent hover:text-amber-500 dark:text-blue-200 dark:hover:text-blue-400 [&_svg]:!size-full" onclick={() => toggle()} title="Toggles Light & Dark"><ThemeToggleIcon /></Button>

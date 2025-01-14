@@ -44,7 +44,7 @@
 </section>
 
 <section>
-	<form method="post" use:enhance>
+	<form method="post" action="?/cryptoTest" use:enhance>
 		<button>submit</button>
 	</form>
 

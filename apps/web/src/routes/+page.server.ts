@@ -1,3 +1,6 @@
+import * as auth from '$lib/server/auth';
+import { createClient } from '$lib/server/db';
+import { fail, redirect } from '@sveltejs/kit';
 import { randomUUID } from 'node:crypto';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -57,7 +60,21 @@ export const actions: Actions = {
 */
 
 export const actions: Actions = {
-	default: async ({ request, locals: { newsletterRepo } }) => {
+	logout: async event => {
+		const { locals, platform } = event;
+
+		if (!locals.session) {
+			return fail(401);
+		}
+		console.log('logging out...');
+		const db = createClient(platform?.env.DEV_DB);
+
+		await auth.invalidateSession(db, locals.session.id);
+		auth.deleteSessionTokenCookie(event);
+
+		redirect(302, '/');
+	},
+	cryptoTest: async ({ request, locals: { newsletterRepo } }) => {
 		// const { randomUUID } = await import('node:crypto');
 		const uuid = randomUUID();
 		console.log('uuid', uuid);

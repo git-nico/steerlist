@@ -12,7 +12,8 @@ export class DbUsersRepo implements UsersRepoInterface {
 	}
 
 	createUser = async (user: UserInsert) => {
-		await this.#db.insert(table.user).values(user);
+		const result = await this.#db.insert(table.user).values(user).returning({ newUserId: table.user.id });
+		return result[0].newUserId;
 	};
 
 	getUserByEmail = async (email: string) => {

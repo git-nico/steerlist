@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Anchor from '$lib/components/Anchor.svelte';
+	import Spinner from '$lib/components/icons/Spinner.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { toast } from 'svelte-sonner';
@@ -26,7 +27,7 @@
 		},
 	});
 
-	const { form: formData, enhance, constraints, reset } = form;
+	const { form: formData, enhance, constraints, reset, delayed } = form;
 </script>
 
 <form method="POST" use:enhance class="max-w-prose">
@@ -51,7 +52,12 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<Form.Button class="w-full">Register</Form.Button>
+	<Form.Button class="w-full">
+		Register
+		{#if $delayed}
+			<Spinner class="absolute right-4" />
+		{/if}
+	</Form.Button>
 	<div class="text-right">
 		<span>Already have an account?</span>
 		<Anchor href="/login">Sign-in instead!</Anchor>
